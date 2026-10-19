@@ -184,6 +184,19 @@ a { color: var(--accent); }
   line-height: 1.4;
 }
 
+/* "if yes / if no / related detail" tag — mobile-only, see media query.
+   On desktop the drawn arrows already carry this. */
+.node__branch {
+  display: none;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--accent-soft);
+}
+.node__branch--info { color: var(--ink-faint); font-weight: 500; font-style: italic; }
+.node--alarm .node__branch { color: #A2584C; }
+
 .node--terminal { background: var(--paper); border-style: solid; }
 .node--key { border-color: var(--accent); border-width: 1.6px; }
 .node--alarm { border-color: var(--alarm); background: var(--alarm-wash); box-shadow: 2px 2px 0 0 #D9C9C2; }
@@ -461,6 +474,7 @@ footer.site a:hover { color: var(--accent); }
   .node--decision.is-active { box-shadow: 2px 2px 0 0 var(--accent); }
   .node--decision.is-active { border-left-color: var(--accent); }
   .edges { display: none; }
+  .node__branch { display: block; margin-bottom: 0.15rem; }
 
   .readout {
     position: fixed;
