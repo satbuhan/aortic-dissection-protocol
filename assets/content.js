@@ -53,6 +53,12 @@ const REFERENCES = [
     kind: "Randomized trial",
     text: "Nienaber CA, Rousseau H, Eggebrecht H, et al.; INSTEAD Trial. Randomized comparison of strategies for type B aortic dissection: the INSTEAD trial. Circulation. 2009;120(25):2519–2528.",
     url: "https://doi.org/10.1161/CIRCULATIONAHA.109.886408"
+  },
+  {
+    id: 9,
+    kind: "Product labeling",
+    text: "Cleviprex (clevidipine) injectable emulsion — dosing and administration. Chiesi USA, Inc.",
+    url: "https://cleviprex.com/dosing-administration/"
   }
 ];
 
@@ -83,7 +89,16 @@ const NODES = [
       "“BP in both arms” is not routine completeness — a dissection flap can occlude or narrow a subclavian origin, so one arm can read a falsely low pressure. Treatment decisions use the higher, truer reading. An arterial line is specified “when feasible” because the vasoactive infusions that follow are titrated minute-to-minute, and a cuff cannot keep up. “Anti-impulse therapy” is this protocol's own shorthand for the combined heart-rate-and-blood-pressure strategy in Step 1 onward: the target is not a blood pressure number alone, but the rate of rise of pressure in the vessel (dP/dt) with every heartbeat.",
     rationale:
       "IV opioid analgesia is listed here, before any drug titration, because uncontrolled pain is itself a sympathetic driver — it raises heart rate and blood pressure independently of the dissection and can masquerade as drug-refractory hypertension later in the algorithm (see Step 2). Treating pain early is part of anti-impulse therapy, not a separate comfort measure. Urgent cardiothoracic/vascular consultation is sought for every suspected dissection, type A or B, because a type B can declare itself complicated at any point.",
-    refs: [1, 2]
+    dose: [
+      ["Morphine", "1–10 mg IV, titrated to effect"],
+      ["Ongoing/breakthrough pain", "morphine PCA — 1 mg bolus, 5-min lockout"],
+      ["Renal impairment", "substitute fentanyl — 10 µg bolus, 5-min lockout"]
+    ],
+    cautions: [
+      "Morphine is renally cleared and its active metabolites accumulate in renal impairment — switch to fentanyl rather than simply reducing the morphine dose.",
+      "Regular paracetamol alongside the opioid is standard adjunct analgesia here unless contraindicated; it supplements but does not replace adequate opioid dosing in the acute phase."
+    ],
+    refs: [1, 2, 6]
   },
   {
     id: "d1",
@@ -127,7 +142,12 @@ const NODES = [
       "This is the one sequencing rule the whole algorithm is built around: a beta-blocker is started first, and a vasodilator is never the first drug given to a dissection.",
     rationale:
       "A vasodilator given to an unblocked heart lowers afterload, which the baroreflex answers with a rise in heart rate and contractility. The resulting increase in dP/dt — how fast pressure rises in the vessel with each beat — and the shortened diastolic interval both add dynamic load to an already-weakened wall, which is exactly the stress the protocol is trying to remove. Establishing beta-blockade first blunts that reflex, so any vasodilator added later (Step 2) lowers pressure without a compensatory tachycardia undoing the benefit.",
-    refs: [1, 2, 5]
+    cautions: [
+      "Pheochromocytoma or cocaine-intoxication-associated hypertension: a pure beta-blocker given first leaves peripheral α1-vasoconstriction unopposed and can paradoxically worsen hypertension. If either is suspected, alpha-blockade first — or a combined agent, below — takes priority over the default sequence.",
+      "Labetalol, a combined α1/β-blocker, is an accepted single-agent alternative to esmolol or metoprolol and is often favoured when combined alpha/beta effect is wanted, or in pregnancy: 10 mg IV slow bolus every 2 minutes to a maximum 200 mg course, with an infusion started alongside the boluses at 15 mg/hr and titrated across roughly 10–60 mg/hr.",
+      "Decompensated heart failure or cardiogenic shock is treated as a relative contraindication even without meeting the SBP <90 threshold on the left — the withhold pathway and hemodynamic support take priority over rate control here."
+    ],
+    refs: [1, 2, 5, 6]
   },
   {
     id: "esmolol",
@@ -145,6 +165,11 @@ const NODES = [
     ],
     rationale:
       "Published dosing ranges for esmolol vary by indication and source — general hypertensive-emergency protocols commonly cap the infusion near 200–300 µg/kg/min, while some point-of-care references list a narrower range specifically for aortic dissection. The values here sit within the broader range reported for hypertensive emergency and reflect this protocol's own titration ceiling; the half-life (≈9 min) and offset within roughly half an hour are well supported.",
+    cautions: [
+      "Hypotension and bradycardia are dose-related and the most common reasons to hold or down-titrate — watch most closely around the loading dose and the first steps of the infusion.",
+      "The concentrated formulation is hyperosmolar and can irritate a peripheral vein on prolonged infusion; prefer a dedicated or central line beyond the first hour or so.",
+      "Because clearance runs through blood esterases rather than the kidney or liver, esmolol is often the preferred agent specifically in renal or hepatic impairment, where metoprolol's effect is harder to predict."
+    ],
     refs: [1, 2, 4]
   },
   {
@@ -162,6 +187,11 @@ const NODES = [
     ],
     rationale:
       "The 2.5–5 mg stepwise bolus pattern and a ~15 mg ceiling are consistent with how IV metoprolol is dosed for rate control more broadly. The specific claim that most of the benefit is already seen by 10 mg is this protocol's own clinical teaching point; the literature search behind this page could not independently source that exact threshold, so it is marked for the author team to attach a citation or confirm as empirical house practice before this page is shared outside the group.",
+    cautions: [
+      "Hepatic metabolism via CYP2D6: clearance slows in significant hepatic impairment, and a genetically slow-metabolizer phenotype can prolong the effect unpredictably — favour esmolol instead if the course may need to stay reversible.",
+      "Can blunt the tachycardic warning sign of hypoglycemia in patients on insulin or sulfonylureas — worth flagging if diabetes is also being managed acutely.",
+      "Relatively contraindicated in decompensated heart failure and significant reactive airway disease; β1-selectivity lowers but does not remove bronchospasm risk (see contraindication criteria above)."
+    ],
     refs: [1, 2],
     needsAuthor: true
   },
@@ -194,9 +224,23 @@ const NODES = [
     sub: "Clevidipine or nicardipine — nitroprusside alternative",
     meaning:
       "“Optimise analgesia (± sedation)” is listed before the vasodilator for the same reason opioids appear in the very first box: unaddressed pain or agitation can present as blood pressure that will not come down, and escalating a vasodilator onto that picture treats the wrong problem. Once pain is genuinely controlled, clevidipine or nicardipine is added on top of the already-established beta-blockade from Step 1 — never in place of it.",
+    dose: [
+      ["Nicardipine — start", "5 mg/hr IV"],
+      ["Nicardipine — titration", "+2.5 mg/hr every 10 min"],
+      ["Nicardipine — ceiling (this protocol)", "15 mg/hr"],
+      ["Nicardipine — maintenance", "2–4 mg/hr once at target"],
+      ["Clevidipine — start", "1–2 mg/hr IV, doubled every 90 sec initially"],
+      ["Clevidipine — typical effective dose", "4–6 mg/hr"],
+      ["Clevidipine — maximum", "32 mg/hr (limited experience above 16 mg/hr)"]
+    ],
     rationale:
       "Both agents are short-acting, arterial-selective, and easy to titrate up or down within minutes, which suits a target that may need to move as HR control and analgesia are adjusted alongside it. They are named here as alternatives to sodium nitroprusside, whose classical drawbacks — cyanide/thiocyanate accumulation with prolonged infusion or renal impairment, and the need for light-protected delivery — make it a less convenient first choice when a comparably fast, titratable option is available.",
-    refs: [1, 2, 6]
+    cautions: [
+      "Clevidipine is delivered in a lipid emulsion (20% soybean oil / egg-yolk phospholipid, as with propofol) — avoid in confirmed egg or soy allergy, defective lipid metabolism, or severe hypertriglyceridemia, and count its fat load toward daily intake if the infusion runs long.",
+      "Nicardipine given peripherally carries a real phlebitis risk — change the infusion site roughly every 12 hours, or prefer central access for runs beyond a few hours — and is hepatically metabolised, so titrate cautiously in significant hepatic impairment.",
+      "If sodium nitroprusside is genuinely the only agent on hand, co-infuse thiosulfate and limit the dose/duration in renal impairment rather than using it unmodified — see the cyanide-accumulation point above."
+    ],
+    refs: [1, 2, 6, 9]
   },
   {
     id: "monitor",
@@ -206,7 +250,11 @@ const NODES = [
     meaning:
       "Each item is a window onto a different failure mode of treatment itself. Hypotension and bradycardia flag overshoot from the drugs just titrated. Urine output and mental status are organ-perfusion proxies for the kidneys and brain respectively — chosen because a dissection flap can progressively compromise a branch ostium at any point, independent of how well the blood pressure is controlled, so malperfusion is watched as an ongoing risk, not a one-time assessment made at triage.",
     rationale:
-      "“SBP <90 mmHg or hypoperfusion → reduce/stop infusion” leans on the same reversibility logic as the esmolol box: because its effect wanes within about 30 minutes of stopping, overshoot can usually be corrected quickly rather than needing an antidote. “Individualise targets in elderly/AKI” exists because chronic hypertension and age shift the autoregulatory curve rightward — a blanket SBP <120 target can underperfuse an already vulnerable brain or kidney that is used to running at a higher baseline pressure.",
+      "“SBP <90 mmHg or hypoperfusion → reduce/stop infusion” leans on the same reversibility logic as the esmolol box: because its effect wanes within about 30 minutes of stopping, overshoot can usually be corrected quickly rather than needing an antidote.",
+    cautions: [
+      "Elderly patients or chronic hypertension: the autoregulatory curve is shifted rightward, so a blanket SBP <120 target can underperfuse an already-adapted brain or kidney — individualise the target rather than enforce the number.",
+      "Pregnancy: ACE inhibitors and ARBs are contraindicated throughout pregnancy; labetalol is the standard agent for combined rate and pressure control. Beta-blocker/antihypertensive therapy is continued through pregnancy and postpartum, and delivery timing and mode are planned at a center with cardiothoracic surgical support — dissection risk does not end at delivery."
+    ],
     refs: [1, 2]
   },
   {
@@ -227,12 +275,20 @@ const NODES = [
    each term per panel is linked, to keep the prose readable. "match" is
    matched case-sensitively and on word boundaries. */
 const GLOSSARY = [
+  { match: "beta-blocker", full: "β-adrenergic receptor blocker", def: "A drug that competitively blocks β-adrenergic receptors. The β1 subtype — concentrated in the SA/AV nodes and ventricular myocardium — mediates the effect this protocol actually wants: negative chronotropy (slower SA-node firing) and negative inotropy (reduced contractile force), which together lower dP/dt directly. β2 blockade (airway and vascular smooth muscle) is the unwanted side effect that β1-selectivity is designed to minimise, not eliminate. Esmolol, metoprolol, and labetalol (a combined α1/β-blocker) are the agents used in this protocol; non-selective or slow-onset agents are not first-line for acute titration here." },
+  { match: "beta-blockade", def: "The pharmacologic state of adequate β1 antagonism — judged clinically here by the heart-rate target being met, not by a fixed dose. Establishing this first is what keeps a vasodilator added later (Step 2) from provoking reflex tachycardia." },
+  { match: "pheochromocytoma", def: "A catecholamine-secreting adrenal (or extra-adrenal) tumour. If present or suspected as a precipitant of the hypertensive crisis, giving a pure beta-blocker first leaves peripheral α1-vasoconstriction unopposed, which can paradoxically worsen hypertension — alpha-blockade must precede or accompany beta-blockade in that specific scenario." },
+  { match: "CYP2D6", full: "cytochrome P450 2D6", def: "The hepatic enzyme chiefly responsible for metabolising metoprolol. Reduced hepatic function — or a genetically slow-metabolizer phenotype — can prolong and intensify its effect unpredictably, which is the pharmacologic reason to favour esmolol when the course needs to stay reversible." },
+  { match: "phlebitis", def: "Inflammation of a vein, here typically from a concentrated or irritant infusion running peripherally for too long — the reason to rotate the site or step up to central access for a prolonged vasoactive infusion." },
+  { match: "PCA", full: "patient-controlled analgesia", def: "A pump letting the patient self-deliver small, pre-set IV analgesic boluses within a safety lockout interval — used once initial titration has established a safe, effective dose, so ongoing pain does not require re-paging for every top-up." },
+  { match: "lipid emulsion", def: "A fat-based IV vehicle (soybean oil and egg-yolk phospholipid — the same base as propofol) used to keep certain poorly water-soluble drugs suspended for infusion. The reason for the egg/soy-allergy and triglyceride cautions on clevidipine above." },
+  { match: "thiosulfate", full: "sodium thiosulfate", def: "A sulfur donor that accelerates the body's own conversion of cyanide — released as nitroprusside is metabolised — into thiocyanate, which is renally excreted. Co-infused specifically to blunt nitroprusside's cyanide-accumulation risk." },
   { match: "TEVAR", full: "Thoracic EndoVascular Aortic Repair", def: "A stent-graft placed inside the aorta through a catheter (usually from the femoral artery) to seal off a dissection or aneurysm from the inside, without open chest surgery." },
   { match: "CT angiography", full: "computed tomography angiography", def: "A contrast-enhanced CT scan that outlines the inside of the vessel lumen — fast enough and detailed enough to be the first-line test for suspected dissection." },
   { match: "dP/dt", full: "rate of pressure rise", def: "How fast pressure rises inside the vessel with each heartbeat. Driven by heart rate and contractility together — lowering either one lowers dP/dt, which is the real target of “anti-impulse” therapy, not blood pressure alone." },
-  { match: "tamponade", full: "cardiac tamponade", def: "Blood or fluid collecting in the sac around the heart under enough pressure to compress it and limit filling between beats — can be rapidly fatal if the pressure keeps rising." },
-  { match: "AR", full: "aortic regurgitation", def: "Blood leaking backward through the aortic valve into the left ventricle. When a dissection causes this acutely, the ventricle has had no time to adapt to the extra volume." },
-  { match: "AV block", full: "atrioventricular block", def: "A delay or interruption in the heart's own electrical signal between the atria and ventricles. High-grade block leaves little safety margin for a drug that slows conduction further." },
+  { match: "tamponade", full: "cardiac tamponade", def: "Pericardial pressure rising to meet or exceed diastolic chamber pressures, impairing ventricular filling — in dissection, typically from blood tracking retrograde into the pericardial sac. Produces equalisation of diastolic pressures across chambers and, classically, pulsus paradoxus. It becomes rapidly fatal once compensatory tachycardia can no longer sustain cardiac output against the rising pressure — which is exactly why it is a beta-blockade contraindication above." },
+  { match: "AR", full: "aortic regurgitation", def: "Retrograde flow through an incompetent aortic valve — here, from the dissection flap disrupting leaflet coaptation or prolapsing a leaflet. Acute AR is hemodynamically distinct from chronic AR: the non-dilated, non-compliant left ventricle cannot accommodate the sudden regurgitant volume, so left ventricular end-diastolic pressure rises sharply. Tachycardia is a compensatory mechanism maintaining forward output here, which is why blunting it with a beta-blocker is dangerous." },
+  { match: "AV block", full: "atrioventricular block", def: "Conduction delay or failure at or below the AV node. First-degree and Mobitz I block carry some safety margin; Mobitz II, 2:1, and third-degree block (\"high-grade\") are the ones that matter here — they leave no AV-nodal reserve to absorb a drug that slows conduction further, risking symptomatic bradycardia or complete heart block." },
   { match: "bronchospasm", def: "Sudden narrowing of the airway's smooth muscle. A risk with any beta-blocker, since even a “beta-1-selective” agent keeps some beta-2 cross-reactivity, more so at higher doses." },
   { match: "beta-1-selective", def: "Preferentially blocks β1 receptors (concentrated in the heart) over β2 receptors (airway and blood-vessel smooth muscle) — the selectivity is relative, not absolute." },
   { match: "contractility", def: "How forcefully the heart muscle contracts for a given fill volume — together with heart rate, one of the two drivers of dP/dt." },

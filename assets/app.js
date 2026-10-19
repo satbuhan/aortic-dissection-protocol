@@ -199,13 +199,19 @@
     if (n.sub) html += '<p class="readout__sub">' + escapeHtml(n.sub) + "</p>";
     if (n.needsAuthor) {
       html +=
-        '<span class="readout__flag">needs author citation · yazar teyidi gerekli</span>';
+        '<span class="readout__flag">awaiting author citation</span>';
     }
     html += "<h3>What this means</h3><p>" + linkify(n.meaning, usedTerms) + "</p>";
     if (n.dose) {
       html += "<h3>Dosing, as authored</h3>" + renderDose(n.dose, usedTerms);
     }
     html += "<h3>Why</h3><p>" + linkify(n.rationale, usedTerms) + "</p>";
+    if (n.cautions && n.cautions.length) {
+      html +=
+        "<h3>Cautions &amp; special populations</h3><ul class=\"caution-list\">" +
+        n.cautions.map((c) => "<li>" + linkify(c, usedTerms) + "</li>").join("") +
+        "</ul>";
+    }
     html += "<h3>References</h3><div class=\"refchips\">" + kindTag(n.refs) + "</div>";
 
     readoutContent.innerHTML = html;

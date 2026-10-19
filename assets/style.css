@@ -145,6 +145,7 @@ a { color: var(--accent); }
 /* node base — a boxed figure on the page, not a UI card */
 .node {
   all: unset;
+  box-sizing: border-box;
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -303,6 +304,18 @@ a { color: var(--accent); }
 .term-def strong { color: var(--ink); font-weight: 600; }
 .term-def[hidden] { display: none; }
 
+.readout ul.caution-list {
+  margin: 0 0 0.6rem;
+  padding-left: 1.15rem;
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--ink);
+  max-width: 54ch;
+}
+.readout ul.caution-list li { margin-bottom: 0.6rem; padding-left: 0.15rem; }
+.readout ul.caution-list li::marker { color: var(--accent-soft); }
+
 .dose-table {
   width: 100%;
   max-width: 44ch;
@@ -438,11 +451,14 @@ footer.site a:hover { color: var(--accent); }
   .node.is-active { box-shadow: 2px 2px 0 0 var(--accent); }
   .node--decision {
     width: 100%; min-height: 0;
+    justify-self: stretch; align-self: stretch;
     padding: 0.7rem 0.85rem;
     text-align: left; align-items: flex-start;
     clip-path: none;
     border-left: 3px solid var(--accent-soft);
+    box-shadow: 1.5px 1.5px 0 0 var(--rule);
   }
+  .node--decision.is-active { box-shadow: 2px 2px 0 0 var(--accent); }
   .node--decision.is-active { border-left-color: var(--accent); }
   .edges { display: none; }
 
