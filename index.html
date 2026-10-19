@@ -13,7 +13,6 @@
 <body>
 
 <header class="masthead">
-  <p class="masthead__kicker">INTERACTIVE CLINICAL PROTOCOL · EMERGENCY &amp; CRITICAL CARE</p>
   <h1>Acute Aortic Dissection: Initial Medical Management</h1>
   <p class="masthead__byline">
     <strong>Dr. Özgür Karcıoğlu</strong> &amp; <strong>Dr. Satuk Buğra Han Bozatlı</strong>
@@ -31,7 +30,6 @@
 <main>
   <div class="workstation">
     <section class="scope" aria-label="Interactive flowchart">
-      <p class="scope__label">PROTOCOL · tap a box</p>
       <div class="flow" id="flow">
         <svg class="edges" id="edges" aria-hidden="true"></svg>
         <!-- nodes are rendered here by app.js from content.js -->
@@ -52,9 +50,11 @@
 
   <div class="scope-backdrop" id="backdrop"></div>
 
-  <section class="references" id="references" aria-label="References">
-    <h2>References</h2>
-    <ol id="referencesList"></ol>
+  <section class="references" aria-label="References">
+    <details id="references">
+      <summary>References <span class="count" id="refCount"></span></summary>
+      <ol id="referencesList"></ol>
+    </details>
   </section>
 </main>
 

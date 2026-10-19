@@ -222,6 +222,30 @@ const NODES = [
   }
 ];
 
+/* Glossary — terms inside the readout panel's prose are auto-linked to
+   these entries (see linkify() in app.js). Only the first occurrence of
+   each term per panel is linked, to keep the prose readable. "match" is
+   matched case-sensitively and on word boundaries. */
+const GLOSSARY = [
+  { match: "TEVAR", full: "Thoracic EndoVascular Aortic Repair", def: "A stent-graft placed inside the aorta through a catheter (usually from the femoral artery) to seal off a dissection or aneurysm from the inside, without open chest surgery." },
+  { match: "CT angiography", full: "computed tomography angiography", def: "A contrast-enhanced CT scan that outlines the inside of the vessel lumen — fast enough and detailed enough to be the first-line test for suspected dissection." },
+  { match: "dP/dt", full: "rate of pressure rise", def: "How fast pressure rises inside the vessel with each heartbeat. Driven by heart rate and contractility together — lowering either one lowers dP/dt, which is the real target of “anti-impulse” therapy, not blood pressure alone." },
+  { match: "tamponade", full: "cardiac tamponade", def: "Blood or fluid collecting in the sac around the heart under enough pressure to compress it and limit filling between beats — can be rapidly fatal if the pressure keeps rising." },
+  { match: "AR", full: "aortic regurgitation", def: "Blood leaking backward through the aortic valve into the left ventricle. When a dissection causes this acutely, the ventricle has had no time to adapt to the extra volume." },
+  { match: "AV block", full: "atrioventricular block", def: "A delay or interruption in the heart's own electrical signal between the atria and ventricles. High-grade block leaves little safety margin for a drug that slows conduction further." },
+  { match: "bronchospasm", def: "Sudden narrowing of the airway's smooth muscle. A risk with any beta-blocker, since even a “beta-1-selective” agent keeps some beta-2 cross-reactivity, more so at higher doses." },
+  { match: "beta-1-selective", def: "Preferentially blocks β1 receptors (concentrated in the heart) over β2 receptors (airway and blood-vessel smooth muscle) — the selectivity is relative, not absolute." },
+  { match: "contractility", def: "How forcefully the heart muscle contracts for a given fill volume — together with heart rate, one of the two drivers of dP/dt." },
+  { match: "malperfusion", def: "Inadequate blood flow to an organ or limb because the dissection flap has narrowed or blocked the vessel supplying it. Can appear or worsen at any point, not only at diagnosis." },
+  { match: "branch vessel", def: "A side artery — renal, mesenteric, iliac, and so on — that originates from the aorta and can be cut off if the dissection flap crosses its origin." },
+  { match: "ostium", def: "The mouth of a branch vessel where it opens off the aorta — the point a dissection flap most often compromises flow to that organ." },
+  { match: "esterases", full: "red-cell (blood) esterases", def: "Enzymes that break a drug down chemically within the bloodstream itself, rather than relying on the kidney or liver. This is why esmolol's action does not lengthen in kidney or liver disease." },
+  { match: "afterload", def: "The pressure the left ventricle must pump against to eject blood. A vasodilator lowers it directly; an unblocked heart's reflex response can offset that benefit by raising heart rate instead." },
+  { match: "baroreflex", def: "The body's fast, automatic reflex that adjusts heart rate and vessel tone to counteract a change in blood pressure — it is this reflex, not the drug itself, that raises heart rate when a vasodilator drops afterload suddenly." },
+  { match: "AKI", full: "acute kidney injury", def: "A sudden drop in kidney function. Here, a reason to individualise rather than enforce the SBP <120 target by default, since the kidney may already be under-perfused." },
+  { match: "autoregulatory curve", full: "autoregulation", def: "The range over which an organ (brain, kidney) keeps its own blood flow roughly constant despite swings in systemic pressure. Chronic hypertension shifts this range upward, so a “normal” pressure can under-perfuse it." }
+];
+
 if (typeof module !== "undefined") {
-  module.exports = { NODES, REFERENCES };
+  module.exports = { NODES, REFERENCES, GLOSSARY };
 }

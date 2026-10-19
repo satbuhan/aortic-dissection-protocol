@@ -39,6 +39,56 @@
   const byId = {};
   NODES.forEach((n) => (byId[n.id] = n));
 
+  /* ---- plain-text safety + glossary auto-linking ---- */
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  // longest match first, so "AV block" wins over any shorter overlapping term
+  const GLOSSARY_SORTED = GLOSSARY.slice().sort((a, b) => b.match.length - a.match.length);
+
+  function linkify(rawText, usedTerms) {
+    const text = escapeHtml(rawText);
+    let result = "";
+    let cursor = 0;
+    // find the earliest, longest unused glossary match from `cursor` onward
+    while (cursor < text.length) {
+      let best = null;
+      for (const g of GLOSSARY_SORTED) {
+        if (usedTerms.has(g.match)) continue;
+        const re = new RegExp("\\b" + g.match.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b");
+        const m = re.exec(text.slice(cursor));
+        if (
+          m &&
+          (!best || m.index < best.index || (m.index === best.index && m[0].length > best.text.length))
+        ) {
+          best = { index: m.index, text: m[0], g };
+        }
+      }
+      if (!best) break;
+      const matchStart = cursor + best.index;
+      const matchEnd = matchStart + best.text.length;
+      result += text.slice(cursor, matchStart);
+      const g = best.g;
+      const label = g.full ? g.full[0].toUpperCase() + g.full.slice(1) : "";
+      result +=
+        '<button type="button" class="term" aria-expanded="false">' +
+        best.text +
+        "</button>" +
+        '<span class="term-def" hidden>' +
+        (g.full ? "<strong>" + escapeHtml(label) + "</strong> — " : "") +
+        escapeHtml(g.def) +
+        "</span>";
+      usedTerms.add(g.match);
+      cursor = matchEnd;
+    }
+    result += text.slice(cursor);
+    return result;
+  }
+
   const flowEl = document.getElementById("flow");
   const edgesSvg = document.getElementById("edges");
 
@@ -113,12 +163,16 @@
       .join("");
   }
 
-  function renderDose(rows) {
+  function renderDose(rows, usedTerms) {
     if (!rows) return "";
     const trs = rows
       .map(
         (r) =>
-          "<tr><td>" + r[0] + "</td><td>" + r[1] + "</td></tr>"
+          "<tr><td>" +
+          linkify(r[0], usedTerms) +
+          "</td><td>" +
+          linkify(r[1], usedTerms) +
+          "</td></tr>"
       )
       .join("");
     return '<table class="dose-table"><tbody>' + trs + "</tbody></table>";
@@ -137,19 +191,21 @@
     readoutIdle.hidden = true;
     readoutContent.hidden = false;
 
+    const usedTerms = new Set();
+
     let html = "";
-    html += '<p class="readout__tag">' + n.type.toUpperCase() + "</p>";
-    html += '<h2 class="readout__title">' + n.label + "</h2>";
-    if (n.sub) html += '<p class="readout__sub">' + n.sub + "</p>";
+    html += '<p class="readout__tag">' + escapeHtml(n.type) + "</p>";
+    html += '<h2 class="readout__title">' + escapeHtml(n.label) + "</h2>";
+    if (n.sub) html += '<p class="readout__sub">' + escapeHtml(n.sub) + "</p>";
     if (n.needsAuthor) {
       html +=
         '<span class="readout__flag">needs author citation · yazar teyidi gerekli</span>';
     }
-    html += "<h3>What this means</h3><p>" + n.meaning + "</p>";
+    html += "<h3>What this means</h3><p>" + linkify(n.meaning, usedTerms) + "</p>";
     if (n.dose) {
-      html += "<h3>Dosing, as authored</h3>" + renderDose(n.dose);
+      html += "<h3>Dosing, as authored</h3>" + renderDose(n.dose, usedTerms);
     }
-    html += "<h3>Why</h3><p>" + n.rationale + "</p>";
+    html += "<h3>Why</h3><p>" + linkify(n.rationale, usedTerms) + "</p>";
     html += "<h3>References</h3><div class=\"refchips\">" + kindTag(n.refs) + "</div>";
 
     readoutContent.innerHTML = html;
@@ -165,6 +221,16 @@
     backdrop.classList.remove("is-open");
   }
 
+  readoutContent.addEventListener("click", (e) => {
+    const btn = e.target.closest(".term");
+    if (!btn) return;
+    const def = btn.nextElementSibling;
+    if (!def || !def.classList.contains("term-def")) return;
+    const open = btn.getAttribute("aria-expanded") === "true";
+    btn.setAttribute("aria-expanded", open ? "false" : "true");
+    def.hidden = open;
+  });
+
   readoutClose.addEventListener("click", closeReadout);
   backdrop.addEventListener("click", closeReadout);
   document.addEventListener("keydown", (e) => {
@@ -174,6 +240,8 @@
   /* ---- references list ---- */
   function renderReferences() {
     const list = document.getElementById("referencesList");
+    const count = document.getElementById("refCount");
+    if (count) count.textContent = "(" + REFERENCES.length + ")";
     REFERENCES.forEach((r) => {
       const li = document.createElement("li");
       li.id = "ref-" + r.id;
@@ -220,7 +288,7 @@
     edgesSvg.setAttribute("height", flowRect.height);
     edgesSvg.setAttribute("viewBox", "0 0 " + flowRect.width + " " + flowRect.height);
     edgesSvg.innerHTML =
-      '<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#2B8F7F"/></marker></defs>';
+      '<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="6.5" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#4A6684"/></marker></defs>';
 
     EDGES.forEach(([fromId, toId, label, variant]) => {
       const a = document.getElementById("node-" + fromId);
