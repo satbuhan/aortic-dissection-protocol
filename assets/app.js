@@ -121,10 +121,13 @@
 
     const incoming = INCOMING[n.id];
     if (incoming) {
+      // mobile only (CSS): nests this card visually under the decision above
+      // it with an indent + a bold YES/NO pill, replacing the hidden arrows.
+      btn.dataset.branchOf = incoming.kind;
       const branch = document.createElement("span");
       branch.className =
         "node__branch" + (incoming.kind === "branch" ? " node__branch--" + incoming.text.toLowerCase() : " node__branch--info");
-      branch.textContent = incoming.kind === "branch" ? "↳ if " + incoming.text.toLowerCase() : "↳ " + incoming.text.toLowerCase();
+      branch.textContent = incoming.kind === "branch" ? incoming.text : "also see";
       btn.appendChild(branch);
     }
 

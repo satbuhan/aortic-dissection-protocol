@@ -474,7 +474,48 @@ footer.site a:hover { color: var(--accent); }
   .node--decision.is-active { box-shadow: 2px 2px 0 0 var(--accent); }
   .node--decision.is-active { border-left-color: var(--accent); }
   .edges { display: none; }
-  .node__branch { display: block; margin-bottom: 0.15rem; }
+
+  /* Branch indicator — replaces the hidden arrows. The outcome card is
+     indented and tagged with a bold YES/NO pill (or a dashed "also see"
+     tag for the non-branch info box), with a short tick connecting it
+     back to the decision card directly above it. */
+  .node__branch {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    padding: 0.16rem 0.6rem;
+    border-radius: 999px;
+    margin-bottom: 0.5rem;
+  }
+  .node__branch--yes { background: var(--accent); color: #fff; }
+  .node__branch--no { background: transparent; border: 1.3px solid var(--accent); color: var(--accent); }
+  .node__branch--info {
+    background: transparent;
+    border: 1px dashed var(--rule-strong);
+    color: var(--ink-faint);
+    font-weight: 600;
+    text-transform: none;
+    font-style: italic;
+  }
+  .node[data-branch-of] {
+    margin-left: 1.1rem;
+    position: relative;
+  }
+  .node[data-branch-of]::after {
+    content: "";
+    position: absolute;
+    left: -0.65rem;
+    top: -0.55rem;
+    width: 0.55rem;
+    height: 1.4rem;
+    border-left: 2px solid var(--rule-strong);
+    border-bottom: 2px solid var(--rule-strong);
+    border-bottom-left-radius: 6px;
+  }
 
   .readout {
     position: fixed;
