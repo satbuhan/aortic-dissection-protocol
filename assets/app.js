@@ -39,17 +39,6 @@
   const byId = {};
   NODES.forEach((n) => (byId[n.id] = n));
 
-  /* Which incoming edge reaches each node — used to print a small
-     "if yes / if no / related detail" tag on mobile, where the SVG
-     connector arrows (and their YES/NO labels) are hidden. Desktop
-     keeps using the drawn arrows, so this tag is mobile-only (see CSS). */
-  const INCOMING = {};
-  EDGES.forEach(([fromId, toId, label, variant]) => {
-    if (INCOMING[toId]) return; // first incoming edge wins
-    if (label) INCOMING[toId] = { kind: "branch", text: label };
-    else if (variant === "info") INCOMING[toId] = { kind: "info", text: "Related detail" };
-  });
-
   /* ---- plain-text safety + glossary auto-linking ---- */
   function escapeHtml(str) {
     return String(str)
@@ -118,18 +107,6 @@
     if (n.tone === "alarm") cls += " node--alarm";
     if (layout.col) cls += " " + layout.col;
     btn.className = cls;
-
-    const incoming = INCOMING[n.id];
-    if (incoming) {
-      // mobile only (CSS): nests this card visually under the decision above
-      // it with an indent + a bold YES/NO pill, replacing the hidden arrows.
-      btn.dataset.branchOf = incoming.kind;
-      const branch = document.createElement("span");
-      branch.className =
-        "node__branch" + (incoming.kind === "branch" ? " node__branch--" + incoming.text.toLowerCase() : " node__branch--info");
-      branch.textContent = incoming.kind === "branch" ? incoming.text : "also see";
-      btn.appendChild(branch);
-    }
 
     const title = document.createElement("span");
     title.className = "node__title";
@@ -308,10 +285,9 @@
   }
 
   function drawEdges() {
-    if (window.matchMedia("(max-width: 900px)").matches) {
-      edgesSvg.innerHTML = "";
-      return;
-    }
+    // Drawn on every viewport now — mobile shows the identical diagram
+    // inside a horizontally scrollable .scope, rather than a reflowed
+    // linear stack, so the arrows are needed there too.
     const flowRect = flowEl.getBoundingClientRect();
     edgesSvg.setAttribute("width", flowRect.width);
     edgesSvg.setAttribute("height", flowRect.height);

@@ -100,6 +100,7 @@ a { color: var(--accent); }
   position: relative;
   padding: 0.25rem 0.1rem 0.5rem;
 }
+.scope__hint { display: none; }
 
 .flow {
   position: relative;
@@ -183,19 +184,6 @@ a { color: var(--accent); }
   color: var(--ink-soft);
   line-height: 1.4;
 }
-
-/* "if yes / if no / related detail" tag — mobile-only, see media query.
-   On desktop the drawn arrows already carry this. */
-.node__branch {
-  display: none;
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  color: var(--accent-soft);
-}
-.node__branch--info { color: var(--ink-faint); font-weight: 500; font-style: italic; }
-.node--alarm .node__branch { color: #A2584C; }
 
 .node--terminal { background: var(--paper); border-style: solid; }
 .node--key { border-color: var(--accent); border-width: 1.6px; }
@@ -457,65 +445,31 @@ footer.site a:hover { color: var(--accent); }
    ========================================================================= */
 @media (max-width: 900px) {
   .workstation { grid-template-columns: 1fr; padding-top: 1.25rem; }
-  .flow { grid-template-columns: 1fr; gap: 0.7rem; }
-  .flow-wrap-2 { grid-template-columns: 1fr; gap: 0.7rem; }
-  .col-left, .col-center, .col-right, .full { grid-column: 1; }
+
+  /* The diagram itself stays IDENTICAL to desktop — same grid, same
+     hexagon decision shapes, same drawn arrows — rather than reflowing
+     into a plain stack. .scope becomes a horizontally scrollable
+     viewport onto that fixed-size diagram; native pinch-zoom (the
+     viewport meta does not disable it) handles reading fine text. */
+  .scope {
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    padding-bottom: 0.6rem;
+  }
+  .scope__hint {
+    display: block;
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    margin: 0 0 0.6rem;
+  }
+  .flow {
+    min-width: 46rem; /* forces the real desktop layout to overflow, not reflow */
+  }
   .node { box-shadow: 1.5px 1.5px 0 0 var(--rule); }
   .node.is-active { box-shadow: 2px 2px 0 0 var(--accent); }
-  .node--decision {
-    width: 100%; min-height: 0;
-    justify-self: stretch; align-self: stretch;
-    padding: 0.7rem 0.85rem;
-    text-align: left; align-items: flex-start;
-    clip-path: none;
-    border-left: 3px solid var(--accent-soft);
-    box-shadow: 1.5px 1.5px 0 0 var(--rule);
-  }
-  .node--decision.is-active { box-shadow: 2px 2px 0 0 var(--accent); }
-  .node--decision.is-active { border-left-color: var(--accent); }
-  .edges { display: none; }
-
-  /* Branch indicator — replaces the hidden arrows. The outcome card is
-     indented and tagged with a bold YES/NO pill (or a dashed "also see"
-     tag for the non-branch info box), with a short tick connecting it
-     back to the decision card directly above it. */
-  .node__branch {
-    display: inline-flex;
-    align-items: center;
-    font-family: var(--font-sans);
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-    padding: 0.16rem 0.6rem;
-    border-radius: 999px;
-    margin-bottom: 0.5rem;
-  }
-  .node__branch--yes { background: var(--accent); color: #fff; }
-  .node__branch--no { background: transparent; border: 1.3px solid var(--accent); color: var(--accent); }
-  .node__branch--info {
-    background: transparent;
-    border: 1px dashed var(--rule-strong);
-    color: var(--ink-faint);
-    font-weight: 600;
-    text-transform: none;
-    font-style: italic;
-  }
-  .node[data-branch-of] {
-    margin-left: 1.1rem;
-    position: relative;
-  }
-  .node[data-branch-of]::after {
-    content: "";
-    position: absolute;
-    left: -0.65rem;
-    top: -0.55rem;
-    width: 0.55rem;
-    height: 1.4rem;
-    border-left: 2px solid var(--rule-strong);
-    border-bottom: 2px solid var(--rule-strong);
-    border-bottom-left-radius: 6px;
-  }
 
   .readout {
     position: fixed;
