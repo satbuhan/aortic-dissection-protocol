@@ -266,15 +266,18 @@
     REFERENCES.forEach((r) => {
       const li = document.createElement("li");
       li.id = "ref-" + r.id;
+      // Not every reference has a stable public URL yet — the source
+      // manuscript this algorithm is drawn from is unpublished at the
+      // time of writing, so it carries no link to show.
+      const linkHtml = r.url
+        ? "<br><a href=\"" +
+          r.url +
+          '" target="_blank" rel="noopener">' +
+          r.url +
+          "</a>"
+        : "";
       li.innerHTML =
-        r.text +
-        ' <span class="kind">' +
-        r.kind +
-        "</span><br><a href=\"" +
-        r.url +
-        '" target="_blank" rel="noopener">' +
-        r.url +
-        "</a>";
+        r.text + ' <span class="kind">' + r.kind + "</span>" + linkHtml;
       list.appendChild(li);
     });
   }
