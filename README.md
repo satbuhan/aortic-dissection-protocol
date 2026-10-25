@@ -73,6 +73,13 @@ diamond from the algorithm (`meaning`, `rationale`, optional `dose` table,
 and `refs` pointing at numbered entries in `REFERENCES`). Add or edit a
 reference in `REFERENCES` and point to it by `id` from any node.
 
+### Building the next tool in this atlas
+
+See [`METHODOLOGY.md`](METHODOLOGY.md) — the full build/verification
+process (fidelity rule, content schema, citation verification, QA steps),
+written so that any collaborator or AI assistant can pick up this project
+in a fresh session and build the next tool the same way.
+
 ## License
 
 Content and code are released under
