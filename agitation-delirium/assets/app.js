@@ -302,6 +302,19 @@
     };
   }
 
+  // Edges whose straight/smooth path would otherwise cross an unrelated
+  // node. This happens here because haloperidol_im sits, column-wise,
+  // directly between delirium_care (row above) and delirium_meds (row
+  // below) — the pair's right-hand slot lands in the exact same lane
+  // the whole delirium branch uses. Each entry names the obstacle to
+  // route around; clearance is measured live off the obstacle's actual
+  // rendered box, not a guessed fixed offset, so it stays correct if
+  // box sizes change (longer content, different viewport, a font swap).
+  const DETOUR = {
+    "delirium_care->delirium_meds": { obstacle: "haloperidol_im", side: "left", clearance: 14 },
+    "haloperidol_im->reassess_agitation": { obstacle: "delirium_meds", side: "left", clearance: 14 }
+  };
+
   function drawEdges() {
     // Drawn on every viewport now — mobile shows the identical diagram
     // inside a horizontally scrollable .scope, rather than a reflowed
@@ -331,11 +344,29 @@
       }
 
       const midY = (p1.y + p2.y) / 2;
-      const d =
-        Math.abs(p1.y - p2.y) < 4
-          ? "M" + p1.x + "," + p1.y + " L" + p2.x + "," + p2.y
-          : "M" + p1.x + "," + p1.y +
-            " C" + p1.x + "," + midY + " " + p2.x + "," + midY + " " + p2.x + "," + p2.y;
+      const detour = DETOUR[fromId + "->" + toId];
+      let d;
+      if (detour) {
+        const obEl = document.getElementById("node-" + detour.obstacle);
+        const obR = obEl.getBoundingClientRect();
+        const detourX =
+          detour.side === "left"
+            ? obR.left - flowRect.left - detour.clearance
+            : obR.right - flowRect.left + detour.clearance;
+        const topY = obR.top - flowRect.top - 10;
+        const botY = obR.bottom - flowRect.top + 10;
+        d =
+          "M" + p1.x + "," + p1.y +
+          " C" + p1.x + "," + (p1.y + 18) + " " + detourX + "," + topY + " " + detourX + "," + topY +
+          " L" + detourX + "," + botY +
+          " C" + detourX + "," + botY + " " + p2.x + "," + (p2.y - 18) + " " + p2.x + "," + p2.y;
+      } else {
+        d =
+          Math.abs(p1.y - p2.y) < 4
+            ? "M" + p1.x + "," + p1.y + " L" + p2.x + "," + p2.y
+            : "M" + p1.x + "," + p1.y +
+              " C" + p1.x + "," + midY + " " + p2.x + "," + midY + " " + p2.x + "," + p2.y;
+      }
 
       const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
       path.setAttribute("d", d);
