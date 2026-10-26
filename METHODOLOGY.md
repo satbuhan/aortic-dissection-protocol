@@ -11,7 +11,9 @@ this file as your instructions.
 **What this is:** a growing series of interactive, referenced
 clinical-algorithm web tools, each converted from the authors' own
 hand-drawn flowcharts. Existing tools: `aortic-dissection-protocol`,
-`agitation-delirium-protocol` (GitHub account: satbuhan).
+`agitation-delirium-protocol`, `influenza-antiviral-protocol` (GitHub
+account: satbuhan). Hub page listing all of them:
+`clinical-algorithm-atlas`.
 
 ## The one rule that overrides everything else
 
@@ -23,7 +25,11 @@ cautions, and citations. Never "fix", paraphrase, round, or standardize a
 `label`, `sub`, or `dose` field without the author team's explicit
 sign-off — those fields are the algorithm itself, not prose. If you edit
 `content.js`, grep the `NODES` array before and after your edit and
-confirm every `label`/`sub`/`dose` string is identical.
+confirm every `label`/`sub`/`dose` string is identical. This includes
+punctuation: splitting one authored box's text across `label` and `sub`
+must not silently drop a semicolon, comma, or parenthesis that was present
+in the original — reconstruct `label + " " + sub` and compare it against
+the source, not just the words.
 
 ## Repo structure — one GitHub repo per tool
 
@@ -39,8 +45,11 @@ Each tool repo looks like this:
 index.html          page structure, masthead, bilingual (EN/TR) disclaimer,
                      footer with absolute cross-links (target="_blank"
                      rel="noopener") to sister-tool repos' live Pages URLs
-assets/style.css     visual design — dark diagram/readout panel, light
-                     "paper" masthead/references section
+                     and to the atlas hub
+assets/style.css     visual design — shared paper/ink/navy "journal"
+                     palette across the atlas; the diagram grid (column
+                     count and widths) adapted per tool to match how many
+                     parallel branches that algorithm actually has
 assets/content.js    single source of truth for content: REFERENCES[],
                      NODES[], GLOSSARY[] — schema below
 assets/app.js        rendering + interaction: a LAYOUT + EDGES description
@@ -58,6 +67,12 @@ the repo's Settings → Pages → "Deploy from branch" → `main` → `/ (root)`
 because the branch/folder was picked; verify with
 `gh api repos/<owner>/<repo> --jq '{has_pages}'`.
 
+Creating the empty GitHub repository itself is a step only the human
+author can do — an AI assistant working from an API-scoped session
+typically cannot call a repo-creation endpoint. Ask the author to create
+an empty repo (no README/.gitignore/license) via GitHub's web UI, then
+clone into it and push.
+
 ## `content.js` schema
 
 - `REFERENCES`: array of `{id, kind, text, url}`. `url` can be `null` (or
@@ -68,8 +83,17 @@ because the branch/folder was picked; verify with
   dose?: [[label, value], ...], cautions?: [...], refs: [...], tone?,
   needsAuthor?}`. `needsAuthor: true` flags a number or claim that the
   author team still needs to confirm or source — flag it, never invent a
-  plausible-sounding citation or number to fill the gap.
-- `GLOSSARY`: array of `{match, full?, def}`.
+  plausible-sounding citation or number to fill the gap. `tone: "key"`
+  marks the pivotal action box on a branch; `tone: "alarm"` marks a "do
+  not" / contraindication box — use sparingly, only where the algorithm
+  itself singles the step out.
+- `GLOSSARY`: array of `{match, full?, def}` — terms auto-linked (with a
+  click-to-expand definition) inside the readout panel's prose. An
+  abbreviation that appears directly inside a diagram box's own
+  `label`/`sub` text is not auto-linked there (those fields render as
+  plain text, deliberately, so the diagram stays exactly as authored) —
+  expand those instead in a short `.abbrev-note` legend printed under the
+  diagram, the same way the original flowchart would carry a legend.
 
 ## Citation verification — do not skip this
 
@@ -93,16 +117,27 @@ a hard rule rather than a suggestion.
 ## Rendering / SVG edge routing (`app.js`)
 
 `LAYOUT` (`{col, decision?, group?, row?}` per node) and `EDGES`
-(`[fromId, toId, label?, variant?]`) drive the diagram. If two nodes end
-up sharing a pixel column with a third node sandwiched between them, an
-edge between the outer two can visually cross straight through the middle
-box. Diagnose this by sampling points along each rendered SVG path
-(`path.getPointAtLength()`) and checking for bounding-rect overlap against
-every *other* node's live `getBoundingClientRect()` — don't just eyeball a
-screenshot. Fix it with a small per-edge detour table that routes the path
-around the obstacle's live bounding rect at draw time, not with hardcoded
-pixel offsets (content and viewport size change; live geometry doesn't
-break when they do).
+(`[fromId, toId, label?, variant?]`) drive the diagram. Pick the column
+count and widths to match the algorithm's actual shape — two columns for
+a genuine two-way fork, three equal columns for three parallel branches,
+an asymmetric `1fr 1.6fr 1fr` only when the center lane carries a decision
+and the side lane is annotation-only. A box that spans two lanes (e.g. a
+second decision that splits a branch the first decision already created)
+needs its own grid-column span class (e.g. `.col-center-right { grid-
+column: 2 / 4; }`) rather than being forced into one lane.
+
+If two nodes end up sharing a pixel column with a third node sandwiched
+between them, an edge between the outer two can visually cross straight
+through the middle box. Diagnose this by sampling points along each
+rendered SVG path (`path.getPointAtLength()`) and checking for
+bounding-rect overlap against every *other* node's live
+`getBoundingClientRect()` — don't just eyeball a screenshot. Fix it with a
+small per-edge detour table that routes the path around the obstacle's
+live bounding rect at draw time, not with hardcoded pixel offsets (content
+and viewport size change; live geometry doesn't break when they do). When
+the layout has no such sandwiching (three independent parallel columns
+with nothing to detour around), the detour table is simply empty — don't
+add one speculatively.
 
 ## QA — do this yourself, every time, before calling something done
 
@@ -116,7 +151,10 @@ cases from actual field use afterward:
 - Serve the folder locally and drive it with an automated browser at both
   a desktop width (~1360px) and a mobile width (~412px).
 - Grep the content file before and after any edit to prove the authored
-  `label`/`sub`/`dose` text is untouched.
+  `label`/`sub`/`dose` text is untouched — and specifically reconstruct
+  `label + " " + sub` for every node and diff it against your own
+  transcription of the source image, to catch a dropped semicolon, comma,
+  or parenthesis that a careless split point can introduce.
 - Verify a git push actually landed by checking the remote directly
   (`git ls-remote`, `git ls-tree -r origin/main --name-only`) rather than
   trusting the push command's own output — a brand-new empty repo can

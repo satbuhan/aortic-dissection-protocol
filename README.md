@@ -10,9 +10,11 @@ and the sources behind it.
 
 **Authors:** Dr. Özgür Karcıoğlu & Dr. Satuk Buğra Han Bozatlı
 
-This tool has a companion built the same way, in its own repository:
-[Butyrophenone selection — acute agitation & hyperactive delirium](https://github.com/satbuhan/agitation-delirium-protocol)
-([live site](https://satbuhan.github.io/agitation-delirium-protocol/)).
+This tool is part of a growing atlas of tools built the same way:
+
+- [Clinical Algorithm Atlas](https://satbuhan.github.io/clinical-algorithm-atlas/) — the hub page for all of them
+- [Butyrophenone selection — acute agitation & hyperactive delirium](https://github.com/satbuhan/agitation-delirium-protocol) ([live site](https://satbuhan.github.io/agitation-delirium-protocol/))
+- [Influenza antiviral selection — baloxavir marboxil vs oseltamivir](https://github.com/satbuhan/influenza-antiviral-protocol) ([live site](https://satbuhan.github.io/influenza-antiviral-protocol/))
 
 ## Why this exists
 
