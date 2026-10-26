@@ -47,7 +47,12 @@ was explicitly abandoned in favor of full separation. Don't repeat that.)
 Each tool repo looks like this:
 
 ```
-index.html          page structure, masthead, bilingual (EN/TR) disclaimer,
+index.html          page structure, masthead, English-only disclaimer
+                     (an earlier version of this project carried a Turkish
+                     translation of the disclaimer too; that was dropped
+                     project-wide — keep everything on these pages in
+                     English, including the disclaimer, not just the
+                     algorithm content),
                      footer with absolute cross-links (target="_blank"
                      rel="noopener") to sister-tool repos' live Pages URLs
                      and to the atlas hub
