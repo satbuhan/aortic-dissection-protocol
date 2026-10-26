@@ -11,9 +11,9 @@ this file as your instructions.
 **What this is:** a growing series of interactive, referenced
 clinical-algorithm web tools, each converted from the authors' own
 hand-drawn flowcharts. Existing tools: `aortic-dissection-protocol`,
-`agitation-delirium-protocol`, `influenza-antiviral-protocol` (GitHub
-account: satbuhan). Hub page listing all of them:
-`clinical-algorithm-atlas`.
+`agitation-delirium-protocol`, `influenza-antiviral-protocol`,
+`nsaid-pain-protocol` (GitHub account: satbuhan). Hub page listing all of
+them: `clinical-algorithm-atlas`.
 
 ## The one rule that overrides everything else
 
@@ -29,7 +29,12 @@ confirm every `label`/`sub`/`dose` string is identical. This includes
 punctuation: splitting one authored box's text across `label` and `sub`
 must not silently drop a semicolon, comma, or parenthesis that was present
 in the original — reconstruct `label + " " + sub` and compare it against
-the source, not just the words.
+the source, not just the words. The same fidelity rule has two directions,
+not one: never invent punctuation the source doesn't have, but also never
+add punctuation to "fix" a plain line break the source genuinely leaves
+unpunctuated — a bare line break can correctly map to no inserted
+character, to a preserved literal `\n` (see "Itemized / bulleted box
+content" below), but never to a comma or semicolon you supplied yourself.
 
 ## Repo structure — one GitHub repo per tool
 
@@ -78,7 +83,13 @@ clone into it and push.
 - `REFERENCES`: array of `{id, kind, text, url}`. `url` can be `null` (or
   omitted) for a source with no stable link — e.g. an unpublished
   manuscript. When rendering references, skip the linked-URL line entirely
-  if `url` is falsy; don't link to something that doesn't exist.
+  if `url` is falsy; don't link to something that doesn't exist. If a
+  trial is multi-arm and only two of its arms are the comparison this tool
+  cites, say so directly in `kind` (e.g. `"Randomized trial (multi-arm;
+  dexketoprofen and ibuprofen arms extracted for this comparison)"`)
+  rather than citing it as if it were a plain two-arm trial — a reader
+  checking the primary source should not be surprised to find a third or
+  fourth arm the citation didn't mention.
 - `NODES`: array of `{id, type, label, sub?, meaning, rationale,
   dose?: [[label, value], ...], cautions?: [...], refs: [...], tone?,
   needsAuthor?}`. `needsAuthor: true` flags a number or claim that the
@@ -94,6 +105,25 @@ clone into it and push.
   plain text, deliberately, so the diagram stays exactly as authored) —
   expand those instead in a short `.abbrev-note` legend printed under the
   diagram, the same way the original flowchart would carry a legend.
+
+### Itemized / bulleted box content
+
+Most boxes flatten naturally to one line or to comma-separated prose (see
+the aortic tool's "criteria" node for the established default). But when
+a source box is genuinely drawn as a bulleted or enumerated list — the
+`nsaid-pain-protocol` tool's two dashed annotation boxes
+(`contraindications_info`, `high_risk_info`) and its two route boxes
+(`oral_route`, `parenteral_route`) are the first case of this in the
+atlas — don't force that into flattened prose either. Preserve it as
+literal `\n` line breaks inside the `sub` string, one item per line, exact
+leading bullet character included if the source draws one. This only
+works if the CSS respects it: add `white-space: pre-line;` to both
+`.node__sub` (the diagram box) and `.readout__sub` (the detail-panel
+echo) — without it the browser collapses the `\n` characters back into a
+single run-on line and the fidelity is lost downstream of `content.js`
+even though the data is correct. Check which pattern a given box actually
+needs by looking at the source image directly; don't default to one
+convention out of habit.
 
 ## Citation verification — do not skip this
 
@@ -113,6 +143,25 @@ applies regardless of which AI or person is doing the verification —
 confidently-stated but wrong citations are a known failure mode for every
 current AI model, this project included, which is why this step exists as
 a hard rule rather than a suggestion.
+
+A specific failure mode to watch for in yourself: when a source page gives
+you everything about a paper (authors, DOI, journal, a description of
+what it found) except the literal title text, the temptation is to write
+a plausible title from the description. Don't — that is fabrication even
+when the surrounding facts are all correct. Go back and re-fetch the same
+source asking explicitly for the exact title as printed, word for word, or
+find a second source (an index entry, an abstract page) that states it
+verbatim. This exact mistake was caught and corrected during the build of
+the `nsaid-pain-protocol` tool (a Dönmez 2024 reference's title was
+initially invented from the paper's description, then replaced with the
+real title after a targeted re-fetch) — it is a realistic failure mode,
+not a hypothetical one, and self-review before finalizing a reference
+list is what caught it.
+
+When a bibliographic detail cannot be confirmed (an end page, an issue
+number), omit that detail rather than guess it — a citation with a missing
+end page is honest; a citation with a guessed one is not, even if the
+guess turns out to be right.
 
 ## Rendering / SVG edge routing (`app.js`)
 
@@ -154,7 +203,11 @@ cases from actual field use afterward:
   `label`/`sub`/`dose` text is untouched — and specifically reconstruct
   `label + " " + sub` for every node and diff it against your own
   transcription of the source image, to catch a dropped semicolon, comma,
-  or parenthesis that a careless split point can introduce.
+  or parenthesis that a careless split point can introduce. When a node
+  uses the literal-`\n` bulleted pattern, diff line-by-line instead of as
+  one flattened string, and visually confirm in the rendered browser that
+  each line actually breaks (a missing `white-space: pre-line;` passes a
+  pure-string diff but still renders wrong).
 - Verify a git push actually landed by checking the remote directly
   (`git ls-remote`, `git ls-tree -r origin/main --name-only`) rather than
   trusting the push command's own output — a brand-new empty repo can
