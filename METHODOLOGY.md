@@ -10,10 +10,13 @@ this file as your instructions.
 **Authors:** Dr. Özgür Karcıoğlu & Dr. Satuk Buğra Han Bozatlı.
 **What this is:** a growing series of interactive, referenced
 clinical-algorithm web tools, each converted from the authors' own
-hand-drawn flowcharts. Existing tools: `aortic-dissection-protocol`,
-`agitation-delirium-protocol`, `influenza-antiviral-protocol`,
-`nsaid-pain-protocol` (GitHub account: satbuhan). Hub page listing all of
-them: `clinical-algorithm-atlas`.
+hand-drawn flowcharts or manuscript figures. Existing tools:
+`aortic-dissection-protocol`, `agitation-delirium-protocol`,
+`influenza-antiviral-protocol`, `nsaid-pain-protocol`,
+`anticoagulant-reversal-protocol`, `obesity-critical-care-protocol`,
+`dapagliflozin-overdose-protocol`, `lidocaine-prilocaine-protocol`
+(GitHub account: satbuhan). Hub page listing all of them:
+`clinical-algorithm-atlas`.
 
 ## The one rule that overrides everything else
 
