@@ -14,7 +14,8 @@ hand-drawn flowcharts or manuscript figures. Existing tools:
 `aortic-dissection-protocol`, `agitation-delirium-protocol`,
 `influenza-antiviral-protocol`, `nsaid-pain-protocol`,
 `anticoagulant-reversal-protocol`, `obesity-critical-care-protocol`,
-`dapagliflozin-overdose-protocol`, `lidocaine-prilocaine-protocol`
+`dapagliflozin-overdose-protocol`, `lidocaine-prilocaine-protocol`,
+`pte-thrombolysis-protocol`
 (GitHub account: satbuhan). Hub page listing all of them:
 `clinical-algorithm-atlas`.
 
