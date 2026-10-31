@@ -252,7 +252,7 @@ const NODES = [
     rationale:
       "“SBP <90 mmHg or hypoperfusion → reduce/stop infusion” relies on the same reversibility logic as the esmolol pathway: because its effect wanes within approximately 30 minutes of stopping, overshoot can usually be corrected quickly, without requiring an antidote.",
     cautions: [
-      "Elderly patients or chronic hypertension: the autoregulatory curve is shifted rightward, so a blanket SBP <120 target can underperfuse an already-adapted brain or kidney — individualise the target rather than enforce the number.",
+      "Elderly patients or chronic hypertension: the autoregulatory curve is shifted rightward, so a blanket SBP <120 target can underperfuse an already-adapted brain or kidney (a risk for AKI) — individualise the target rather than enforce the number.",
       "Pregnancy: ACE inhibitors and ARBs are contraindicated throughout pregnancy; labetalol is the standard agent for combined rate and pressure control. Beta-blocker/antihypertensive therapy is continued through pregnancy and postpartum, and delivery timing and mode are planned at a center with cardiothoracic surgical support — dissection risk does not end at delivery."
     ],
     refs: [1, 2]

@@ -1,6 +1,12 @@
 (function () {
   "use strict";
 
+  // This tool's own slug, used to (a) skip self-links when another tool's
+  // glossary term points back here and (b) build this tool's own deep links
+  // when it's the one being pointed at. Every tool in the atlas sets this to
+  // its own repo name.
+  const TOOL_SLUG = "aortic-dissection-protocol";
+
   /* Where each node sits in the 3-column scope grid.
      "group" nodes are rendered inside a nested 2-col wrapper (esmolol/metoprolol). */
   const LAYOUT = {
@@ -50,6 +56,44 @@
   // longest match first, so "AV block" wins over any shorter overlapping term
   const GLOSSARY_SORTED = GLOSSARY.slice().sort((a, b) => b.match.length - a.match.length);
 
+  /* ---- cross-atlas concept links ----
+     A term that's independently glossary-defined in 2+ tools (checked and
+     curated by hand when the index was built — same string, same clinical
+     meaning, not just a coincidental match) gets a "Also covered in" line
+     added under its definition, deep-linking straight to the other tool's
+     node via its #node-<id> hash. Fetched once, best-effort: the page works
+     identically if this never loads (slow network, offline, concepts.json
+     unreachable) — it only adds a line that otherwise doesn't appear. */
+  let CONCEPTS = null;
+  let currentNodeId = null; // re-rendered once CONCEPTS loads, if a node is already open
+  fetch("https://satbuhan.github.io/clinical-algorithm-atlas/assets/concepts.json")
+    .then((r) => (r.ok ? r.json() : null))
+    .then((data) => {
+      CONCEPTS = (data && data.terms) || {};
+      if (currentNodeId) selectNode(currentNodeId);
+    })
+    .catch(() => {
+      CONCEPTS = {};
+    });
+
+  // Other tools' occurrences of this same term, as an "Also covered in"
+  // list — empty string if the index hasn't loaded yet, carries nothing to
+  // show, or every occurrence is this tool itself.
+  function crossLinksHtml(matchText) {
+    if (!CONCEPTS) return "";
+    const entries = CONCEPTS[matchText.toLowerCase().trim()];
+    if (!entries) return "";
+    const others = entries.filter((o) => o.tool !== TOOL_SLUG);
+    if (!others.length) return "";
+    const links = others
+      .map((o) => {
+        const href = o.nodeId ? o.url + "#node-" + o.nodeId : o.url;
+        return '<a href="' + href + '">' + escapeHtml(o.title) + " →</a>";
+      })
+      .join(", ");
+    return '<p class="term-crosslinks">Also covered in: ' + links + "</p>";
+  }
+
   function linkify(rawText, usedTerms) {
     const text = escapeHtml(rawText);
     let result = "";
@@ -81,6 +125,7 @@
         '<span class="term-def" hidden>' +
         (g.full ? "<strong>" + escapeHtml(label) + "</strong> — " : "") +
         escapeHtml(g.def) +
+        crossLinksHtml(g.match) +
         "</span>";
       usedTerms.add(g.match);
       cursor = matchEnd;
@@ -181,6 +226,7 @@
   function selectNode(id) {
     const n = byId[id];
     if (!n) return;
+    currentNodeId = id;
     clearActive();
     const el = document.getElementById("node-" + id);
     if (el) {
@@ -362,4 +408,18 @@
   }
   window.addEventListener("load", drawEdges);
   drawEdges();
+
+  // Deep link support: "#node-<id>" (matching each node button's own DOM
+  // id) opens that node's readout and scrolls it into view on arrival —
+  // what the cross-atlas "Also covered in" links above point at, so a
+  // click lands on the right box instead of just the other tool's
+  // homepage. Harmless on a plain, hash-free visit.
+  const linkedNodeId = window.location.hash.replace(/^#node-/, "");
+  if (linkedNodeId && byId[linkedNodeId]) {
+    selectNode(linkedNodeId);
+    window.addEventListener("load", () => {
+      const el = document.getElementById("node-" + linkedNodeId);
+      if (el) el.scrollIntoView({ block: "center", inline: "center" });
+    });
+  }
 })();

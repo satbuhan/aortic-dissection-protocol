@@ -307,6 +307,18 @@ a { color: var(--accent); }
 .term-def strong { color: var(--ink); font-weight: 600; }
 .term-def[hidden] { display: none; }
 
+/* cross-atlas "Also covered in" line — appended inside .term-def when the
+   same glossary term is independently defined in another tool */
+.term-crosslinks {
+  margin: 0.5rem 0 0;
+  padding-top: 0.4rem;
+  border-top: 1px dotted var(--rule);
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+.term-crosslinks a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent-soft); }
+.term-crosslinks a:hover { border-bottom-style: solid; }
+
 .readout ul.caution-list {
   margin: 0 0 0.6rem;
   padding-left: 1.15rem;
