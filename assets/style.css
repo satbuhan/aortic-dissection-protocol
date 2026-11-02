@@ -180,6 +180,18 @@ a { color: var(--accent); }
   font-size: 0.92rem;
   line-height: 1.32;
 }
+
+/* Clinical agent (drug) names, emphasised wherever they appear — diagram
+   boxes and the readout panel's prose alike. Which names are highlighted
+   comes from content.js's AGENTS array; wrapping happens at render time
+   in app.js, never in the authored label/sub text itself. Uses the
+   page's one existing accent color (already the "emphasis" color for
+   active/focused nodes and edge labels) rather than introducing a new
+   color, so this reads as "the atlas's emphasis," not a separate system. */
+.agent-name {
+  color: var(--accent);
+  font-weight: 700;
+}
 .node__sub {
   font-family: var(--font-sans);
   font-size: 0.72rem;
