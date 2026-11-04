@@ -17,7 +17,7 @@ hand-drawn flowcharts or manuscript figures. Existing tools:
 `dapagliflozin-overdose-protocol`, `lidocaine-prilocaine-protocol`,
 `pte-thrombolysis-protocol`, `lmwh-nste-acs-protocol`,
 `ketamine-head-injury-protocol`, `midazolam-clonazepam-protocol`,
-`vasopressor-shock-protocol`
+`vasopressor-shock-protocol`, `wbct-trauma-protocol`
 (GitHub account: satbuhan). Hub page listing all of them:
 `clinical-algorithm-atlas`.
 
