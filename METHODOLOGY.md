@@ -18,7 +18,8 @@ hand-drawn flowcharts or manuscript figures. Existing tools:
 `pte-thrombolysis-protocol`, `lmwh-nste-acs-protocol`,
 `ketamine-head-injury-protocol`, `midazolam-clonazepam-protocol`,
 `vasopressor-shock-protocol`, `wbct-trauma-protocol`,
-`epinephrine-revisited-protocol`, `ketamine-indications-protocol`
+`epinephrine-revisited-protocol`, `ketamine-indications-protocol`,
+`tenecteplase-alteplase-stemi-protocol`
 (GitHub account: satbuhan). Hub page listing all of them:
 `clinical-algorithm-atlas`.
 
