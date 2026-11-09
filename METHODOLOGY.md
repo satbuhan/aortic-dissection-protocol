@@ -75,9 +75,16 @@ index.html          page structure, masthead, English-only disclaimer
                      project-wide — keep everything on these pages in
                      English, including the disclaimer, not just the
                      algorithm content),
-                     footer with absolute cross-links (target="_blank"
-                     rel="noopener") to sister-tool repos' live Pages URLs
-                     and to the atlas hub
+                     footer with a single absolute cross-link (target="_blank"
+                     rel="noopener") back to the atlas hub — simplified
+                     2026-11-09 from a hand-maintained flat list of every
+                     sister tool's own link (which had grown to 20 entries,
+                     read as chaotic, and needed a 21-repo edit on every new
+                     tool launch, with real drift between repos by the
+                     time it was replaced). The hub's own grouped,
+                     always-current gallery is the one place to browse
+                     every tool now; don't reintroduce a per-tool sister
+                     link list here.
 assets/style.css     visual design — shared paper/ink/navy "journal"
                      palette across the atlas; the diagram grid (column
                      count and widths) adapted per tool to match how many
