@@ -117,6 +117,15 @@ clone into it and push.
 
 ## `content.js` schema
 
+- `VERIFIED`: added 2026-11-10. Top-level `const VERIFIED =
+  "YYYY-MM-DD";` (or `null`) -- the date this tool's content and
+  citations were last built/checked together. Set it to the date you
+  actually *finish* the citation-verification pass below, not when you
+  started. Use `null` with an explanatory comment instead of a
+  backfilled guess if verification is genuinely incomplete when you
+  ship (see this repo's own README Status section for whether that
+  applies here). `assets/app.js`'s References `<summary>` shows
+  "(N) — verified <date>" when set, nothing extra when `null`.
 - `REFERENCES`: array of `{id, kind, text, url}`. `url` can be `null` (or
   omitted) for a source with no stable link — e.g. an unpublished
   manuscript. When rendering references, skip the linked-URL line entirely
