@@ -76,15 +76,18 @@ index.html          page structure, masthead, English-only disclaimer
                      English, including the disclaimer, not just the
                      algorithm content),
                      footer with a single absolute cross-link (target="_blank"
-                     rel="noopener") back to the atlas hub — simplified
-                     2026-11-09 from a hand-maintained flat list of every
-                     sister tool's own link (which had grown to 20 entries,
-                     read as chaotic, and needed a 21-repo edit on every new
-                     tool launch, with real drift between repos by the
-                     time it was replaced). The hub's own grouped,
-                     always-current gallery is the one place to browse
-                     every tool now; don't reintroduce a per-tool sister
-                     link list here.
+                     rel="noopener") back to the atlas hub, plus a
+                     "Report an issue" link straight to this repo's own
+                     GitHub issues/new page (added 2026-11-10, since
+                     GitHub Issues is already enabled on every atlas repo)
+                     — the hub link was simplified 2026-11-09 from a
+                     hand-maintained flat list of every sister tool's own
+                     link (which had grown to 20 entries, read as chaotic,
+                     and needed a 21-repo edit on every new tool launch,
+                     with real drift between repos by the time it was
+                     replaced). The hub's own grouped, always-current
+                     gallery is the one place to browse every tool now;
+                     don't reintroduce a per-tool sister link list here.
 assets/style.css     visual design — shared paper/ink/navy "journal"
                      palette across the atlas; the diagram grid (column
                      count and widths) adapted per tool to match how many
