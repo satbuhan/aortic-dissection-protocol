@@ -346,7 +346,10 @@
   function renderReferences() {
     const list = document.getElementById("referencesList");
     const count = document.getElementById("refCount");
-    if (count) count.textContent = "(" + REFERENCES.length + ")";
+    const verified = typeof VERIFIED !== "undefined" ? VERIFIED : null;
+    if (count) {
+      count.textContent = "(" + REFERENCES.length + ")" + (verified ? " — verified " + verified : "");
+    }
     REFERENCES.forEach((r) => {
       const li = document.createElement("li");
       li.id = "ref-" + r.id;
