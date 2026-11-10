@@ -72,6 +72,19 @@ a { color: var(--accent); }
   margin: 0 0 1.1rem;
   max-width: 56ch;
 }
+
+.masthead__doi {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  margin: 0 0 1.1rem;
+}
+.masthead__doi a {
+  color: var(--ink-faint);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.masthead__doi a:hover { color: var(--accent); }
 .masthead__byline strong { color: var(--ink); font-weight: 600; }
 .masthead__disclaimer {
   font-family: var(--font-sans);
