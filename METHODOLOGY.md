@@ -26,7 +26,8 @@ hand-drawn flowcharts or manuscript figures. Existing tools:
 `succinylcholine-rocuronium-protocol`,
 `geriatric-pain-protocol`,
 `metoclopramide-ondansetron-protocol`,
-`spontaneous-pneumothorax-protocol`
+`spontaneous-pneumothorax-protocol`,
+`button-battery-protocol`
 (GitHub account: satbuhan). Hub page listing all of them:
 `clinical-algorithm-atlas`.
 
