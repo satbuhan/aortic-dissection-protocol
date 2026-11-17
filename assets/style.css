@@ -38,12 +38,37 @@ html { -webkit-text-size-adjust: 100%; }
 
 body {
   margin: 0;
+  padding-top: calc(2rem + 1px);
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-serif);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
+
+/* Sticky return-to-hub link — the footer carries the same link, but a
+   long diagram means scrolling all the way down just to get back to the
+   gallery. This stays pinned at the very top regardless of scroll
+   position (z-index above the mobile readout/backdrop, so it's still
+   reachable even with a node's readout panel open). */
+.top-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 30;
+  height: 2rem;
+  line-height: 2rem;
+  padding: 0 1.5rem;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  color: var(--ink-faint);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.top-nav:hover { color: var(--accent); }
 
 a { color: var(--accent); }
 
