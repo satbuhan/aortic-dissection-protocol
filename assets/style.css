@@ -38,7 +38,7 @@ html { -webkit-text-size-adjust: 100%; }
 
 body {
   margin: 0;
-  padding-top: calc(2rem + 1px);
+  padding-top: calc(4.25rem + 1px);
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-serif);
@@ -46,29 +46,39 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Sticky return-to-hub link — the footer carries the same link, but a
+/* Sticky return-to-hub button — the footer carries the same link, but a
    long diagram means scrolling all the way down just to get back to the
-   gallery. This stays pinned at the very top regardless of scroll
-   position (z-index above the mobile readout/backdrop, so it's still
-   reachable even with a node's readout panel open). */
+   gallery. This floats as its own pill, inset from the top edge rather
+   than glued flush to it: a full-width strip sitting right at the very
+   top of a phone screen competes with the system's swipe-down-for-
+   notifications gesture, so it was easy to miss or mistap. Staying
+   inset avoids that and reads as a deliberate button rather than a thin
+   utility strip. z-index above the mobile readout/backdrop, so it's
+   still reachable even with a node's readout panel open. */
 .top-nav {
   position: fixed;
-  top: 0; left: 0; right: 0;
+  top: 0.75rem;
+  left: 0.75rem;
   z-index: 30;
-  height: 2rem;
-  line-height: 2rem;
-  padding: 0 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  height: 3rem;
+  padding: 0 1.2rem;
+  border-radius: 999px;
   background: var(--paper);
-  border-bottom: 1px solid var(--rule);
+  border: 1px solid var(--rule-strong);
+  box-shadow: 0 2px 6px rgba(31, 36, 32, 0.12);
   font-family: var(--font-sans);
-  font-size: 0.76rem;
-  color: var(--ink-faint);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink);
   text-decoration: none;
   white-space: nowrap;
+  max-width: calc(100vw - 1.5rem);
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.top-nav:hover { color: var(--accent); }
+.top-nav:hover, .top-nav:active { color: var(--accent); border-color: var(--accent); }
 
 a { color: var(--accent); }
 
