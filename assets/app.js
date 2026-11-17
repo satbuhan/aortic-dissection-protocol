@@ -174,7 +174,7 @@
           '<button type="button" class="term" aria-expanded="false">' +
           best.text +
           "</button>" +
-          '<span class="term-def" hidden>' +
+          '<span class="term-def" hidden data-term="' + escapeHtml(g.match) + '">' +
           (g.full ? "<strong>" + escapeHtml(label) + "</strong> — " : "") +
           escapeHtml(g.def) +
           crossLinksHtml(g.match) +
