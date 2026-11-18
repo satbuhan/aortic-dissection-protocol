@@ -478,13 +478,4 @@
       if (el) el.scrollIntoView({ block: "center", inline: "center" });
     });
   }
-
-  // "Open in browser" — hidden by default; only the Android app's
-  // WebView tags its requests with this User-Agent suffix (see
-  // MainActivity.kt), so this never appears in an ordinary browser,
-  // where the same button would just be a pointless self-link.
-  if (/ClinicalAlgorithmAtlasApp/.test(navigator.userAgent)) {
-    const openInBrowserBtn = document.getElementById("openInBrowser");
-    if (openInBrowserBtn) openInBrowserBtn.classList.add("is-visible");
-  }
 })();
